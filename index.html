@@ -1,96 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#075b42">
-<title>পাক্কা মসজিদ হিসাব</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#176b45">
+<title>পাক্কা মসজিদ — মসজিদ আল-জামিয়াতুল ফাতাহ</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f1f5f2;margin:0;color:#17352b}
-header{background:#075b42;color:white;padding:22px 16px;text-align:center}
-main{max-width:650px;margin:auto;padding:15px}
-.card{background:white;padding:16px;margin:12px 0;border-radius:12px;box-shadow:0 2px 8px #0001}
-input,select,button{box-sizing:border-box;width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px}
-button{background:#087b56;color:white;border:0;font-weight:bold}
-.total{font-size:20px;font-weight:bold;color:#087b56}
-.small{font-size:13px;color:#555}
-</style>
-</head>
+:root{--green:#176b45;--pale:#edf7f0;--red:#b42318;--ink:#17231c;--muted:#65736a;--line:#dce7df}*{box-sizing:border-box}body{margin:0;background:#f4f7f5;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}header{background:var(--green);color:#fff;padding:22px 16px 20px;text-align:center}header h1{font-size:22px;margin:0 0 6px}header p{margin:0;font-size:14px;opacity:.95}.wrap{max-width:850px;margin:0 auto;padding:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 10px;box-shadow:0 2px 8px #163a2010}.card span{display:block;color:var(--muted);font-size:12px}.card strong{display:block;font-size:19px;margin-top:6px;overflow-wrap:anywhere}.card.balance{background:var(--pale);border-color:#b9dec5}.sections{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px}.panel h2{font-size:18px;margin:0 0 12px}.income h2{color:var(--green)}.expense h2{color:var(--red)}label{display:block;font-size:13px;margin:10px 0 5px;color:#39483e}input,select,textarea{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid #cbd8cf;border-radius:8px;background:white;color:var(--ink)}button{font:inherit;border:0;border-radius:9px;padding:11px 13px;background:var(--green);color:white;font-weight:650;cursor:pointer}.expense button{background:var(--red)}.full{width:100%;margin-top:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.toolbar button{background:#e4eee7;color:#174b31}.toolbar .danger{background:#fff0ee;color:#9f1d16}.list{margin-top:14px}.entry{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;justify-content:space-between;align-items:flex-start}.entry:last-child{border-bottom:0}.entry .desc{min-width:0}.entry strong{display:block;overflow-wrap:anywhere}.entry small{display:block;color:var(--muted);margin-top:3px}.amount{font-weight:750;white-space:nowrap}.amount.in{color:var(--green)}.amount.out{color:var(--red)}.del{background:#fff0ee;color:#a52118;padding:6px 9px;font-size:12px;margin-top:6px}.empty{color:var(--muted);padding:15px 0;text-align:center}.note{font-size:12px;color:var(--muted);line-height:1.5;margin:12px 2px 25px}.hidden{display:none!important}@media(max-width:600px){.sections{grid-template-columns:1fr}.card{padding:11px 8px}.card strong{font-size:16px}.cards{gap:6px}header h1{font-size:20px}}
+</style></head>
 <body>
-<header>
-<h2>পাক্কা মসজিদ</h2>
-<div>মসজিদ আল-জামিয়াতুল ফাতাহ</div>
-<p>আয়-ব্যয়ের প্রাথমিক হিসাব</p>
-</header>
-<main>
-<div class="card">
-<h3>হিসাব যোগ করুন</h3>
-<select id="type">
-<option value="in">আয়</option>
-<option value="out">ব্যয়</option>
-</select>
-<input id="desc" placeholder="বিবরণ / দাতার নাম">
-<input id="amount" type="number" min="1" placeholder="টাকার পরিমাণ">
-<input id="date" type="date">
-<button onclick="addEntry()">হিসাব সংরক্ষণ</button>
+<header><h1>পাক্কা মসজিদ</h1><p>মসজিদ আল-জামিয়াতুল ফাতাহ — আয়-ব্যয়ের হিসাব</p></header>
+<main class="wrap">
+<section class="cards" aria-label="মোট হিসাব">
+<div class="card"><span>মোট আয়</span><strong id="totalIn">০ টাকা</strong></div>
+<div class="card"><span>মোট ব্যয়</span><strong id="totalOut">০ টাকা</strong></div>
+<div class="card balance"><span>বর্তমান জমা</span><strong id="balance">০ টাকা</strong></div>
+</section>
+<div class="sections">
+<section class="panel income"><h2>＋ আয় যোগ করুন</h2><form id="incomeForm"><label for="inAmount">টাকার পরিমাণ *</label><input id="inAmount" type="number" min="1" step="0.01" required placeholder="যেমন: ৫০০"><label for="inName">দাতার নাম</label><input id="inName" maxlength="100" placeholder="যিনি টাকা দিয়েছেন"><label for="inCategory">আয়ের ধরন</label><select id="inCategory"><option>সাধারণ অনুদান</option><option>মাসিক চাঁদা</option><option>জুমার দান</option><option>যাকাত/সদকা</option><option>অন্যান্য</option></select><label for="inDate">তারিখ *</label><input id="inDate" type="date" required><label for="inNote">বিবরণ (ঐচ্ছিক)</label><input id="inNote" maxlength="200" placeholder="যেমন: নির্মাণ তহবিল"><button class="full" type="submit">আয় সংরক্ষণ করুন</button></form></section>
+<section class="panel expense"><h2>− ব্যয় যোগ করুন</h2><form id="expenseForm"><label for="outAmount">টাকার পরিমাণ *</label><input id="outAmount" type="number" min="1" step="0.01" required placeholder="যেমন: ২০০"><label for="outName">যাকে/যেখানে দেওয়া হয়েছে</label><input id="outName" maxlength="100" placeholder="দোকান বা ব্যক্তির নাম"><label for="outCategory">ব্যয়ের খাত</label><select id="outCategory"><option>বিদ্যুৎ বিল</option><option>পরিচ্ছন্নতা</option><option>মেরামত</option><option>ইমাম/কর্মচারী</option><option>নির্মাণ কাজ</option><option>অন্যান্য</option></select><label for="outDate">তারিখ *</label><input id="outDate" type="date" required><label for="outNote">বিবরণ (ঐচ্ছিক)</label><input id="outNote" maxlength="200" placeholder="যেমন: ফ্যান মেরামত"><button class="full" type="submit">ব্যয় সংরক্ষণ করুন</button></form></section>
 </div>
-<div class="card">
-<h3>মোট হিসাব</h3>
-<p>মোট আয়: <span class="total" id="income">০</span> টাকা</p>
-<p>মোট ব্যয়: <span class="total" id="expense">০</span> টাকা</p>
-<p>বর্তমান জমা: <span class="total" id="balance">০</span> টাকা</p>
-</div>
-<div class="card">
-<h3>হিসাবের তালিকা</h3>
-<div id="list">এখনো কোনো হিসাব যোগ করা হয়নি।</div>
-<button onclick="exportData()">হিসাব ব্যাকআপ ডাউনলোড</button>
-<p class="small">এই প্রাথমিক সংস্করণে তথ্য শুধু এই ব্রাউজারেই থাকে। অনলাইন ব্যাকআপ এখনো যুক্ত হয়নি।</p>
-</div>
+<section class="panel list"><h2>হিসাবের তালিকা</h2><div class="toolbar"><button id="exportBtn" type="button">ব্যাকআপ ডাউনলোড</button><button id="importBtn" type="button">ব্যাকআপ ফিরিয়ে আনুন</button><input class="hidden" id="importFile" type="file" accept="application/json,.json"></div><div id="entries"><p class="empty">এখনো কোনো হিসাব যোগ করা হয়নি।</p></div></section>
+<p class="note">গুরুত্বপূর্ণ: এই সংস্করণে হিসাব এই মোবাইলের এই ব্রাউজারে সংরক্ষিত হয়। এটি এখনো অনলাইন ডেটাবেস বা কমিটির লগইন ব্যবস্থার সঙ্গে যুক্ত নয়। ব্রাউজারের ডেটা মুছে গেলে হিসাব হারাতে পারে—নিয়মিত ব্যাকআপ ডাউনলোড করুন।</p>
 </main>
 <script>
-const key='pakkaMosjidEntries';
-let entries=JSON.parse(localStorage.getItem(key)||'[]');
-document.getElementById('date').value=new Date().toISOString().slice(0,10);
-function money(n){return Number(n).toLocaleString('bn-BD')}
-function save(){localStorage.setItem(key,JSON.stringify(entries));render()}
-function addEntry(){
- const type=document.getElementById('type').value;
- const desc=document.getElementById('desc').value.trim();
- const amount=Number(document.getElementById('amount').value);
- const date=document.getElementById('date').value;
- if(!desc||amount<=0||!date){alert('বিবরণ, সঠিক টাকার পরিমাণ ও তারিখ দিন।');return}
- entries.unshift({type,desc,amount,date});
- save();
- document.getElementById('desc').value='';
- document.getElementById('amount').value='';
- alert('এই ব্রাউজারে হিসাব সংরক্ষিত হয়েছে।');
-}
-function render(){
- let inc=0,out=0;
- entries.forEach(e=>{if(e.type==='in')inc+=e.amount;else out+=e.amount});
- document.getElementById('income').textContent=money(inc);
- document.getElementById('expense').textContent=money(out);
- document.getElementById('balance').textContent=money(inc-out);
- const list=document.getElementById('list');
- if(!entries.length){list.textContent='এখনো কোনো হিসাব যোগ করা হয়নি।';return}
- list.innerHTML='';
- entries.forEach((e,i)=>{
-  const d=document.createElement('div');
-  d.className='card';
-  d.textContent=(e.type==='in'?'আয়':'ব্যয়')+' — '+e.desc+' — '+money(e.amount)+' টাকা — '+e.date;
-  const b=document.createElement('button');
-  b.textContent='এই হিসাব মুছুন';
-  b.onclick=()=>{if(confirm('হিসাবটি মুছবেন?')){entries.splice(i,1);save()}};
-  d.appendChild(b);list.appendChild(d);
- });
-}
-function exportData(){
- const blob=new Blob([JSON.stringify(entries,null,2)],{type:'application/json'});
- const a=document.createElement('a');
- a.href=URL.createObjectURL(blob);a.download='pakka-mosjid-backup.json';a.click();
- URL.revokeObjectURL(a.href);
-}
-render();
-</script>
-</body>
-</html>
+(()=>{'use strict';const KEY='pakkaMosjidAccountsV2';const $=id=>document.getElementById(id);const today=new Date();const localDate=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;$('inDate').value=localDate;$('outDate').value=localDate;let records=[];try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed))records=parsed;}}catch(e){}const digits=n=>Number(n||0).toLocaleString('bn-BD',{maximumFractionDigits:2});const money=n=>digits(n)+' টাকা';function save(){try{localStorage.setItem(KEY,JSON.stringify(records));return true}catch(e){alert('মোবাইলে হিসাব সংরক্ষণ করা যায়নি। জায়গা খালি করে আবার চেষ্টা করুন এবং ব্যাকআপ রাখুন।');return false}}function render(){let inc=0,out=0;records.forEach(r=>{if(r.type==='income')inc+=Number(r.amount)||0;else out+=Number(r.amount)||0});$('totalIn').textContent=money(inc);$('totalOut').textContent=money(out);$('balance').textContent=money(inc-out);const box=$('entries');box.replaceChildren();if(!records.length){const p=document.createElement('p');p.className='empty';p.textContent='এখনো কোনো হিসাব যোগ করা হয়নি।';box.append(p);return}const sorted=[...records].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||0)-(a.createdAt||0));sorted.forEach(r=>{const row=document.createElement('div');row.className='entry';const desc=document.createElement('div');desc.className='desc';const title=document.createElement('strong');title.textContent=(r.type==='income'?'আয় — ':'ব্যয় — ')+(r.category||'অন্যান্য');desc.append(title);const detail=document.createElement('small');detail.textContent=[r.name,r.date,r.note].filter(Boolean).join(' · ');desc.append(detail);const side=document.createElement('div');side.style.textAlign='right';const amount=document.createElement('div');amount.className='amount '+(r.type==='income'?'in':'out');amount.textContent=(r.type==='income'?'+':'−')+money(r.amount);side.append(amount);const del=document.createElement('button');del.type='button';del.className='del';del.textContent='মুছুন';del.addEventListener('click',()=>{if(confirm('এই হিসাবটি মুছে ফেলবেন?')){records=records.filter(x=>x.id!==r.id);save();render()}});side.append(del);row.append(desc,side);box.append(row)})}function submit(type,e){e.preventDefault();const prefix=type==='income'?'in':'out';const amount=Number($(prefix+'Amount').value);if(!Number.isFinite(amount)||amount<=0){alert('সঠিক টাকার পরিমাণ লিখুন।');return}const rec={id:(Date.now().toString(36)+Math.random().toString(36).slice(2,8)),type,amount,name:$(prefix+'Name').value.trim(),category:$(prefix+'Category').value,date:$(prefix+'Date').value,note:$(prefix+'Note').value.trim(),createdAt:Date.now()};records.push(rec);if(save()){e.target.reset();$(prefix+'Date').value=localDate;render();alert(type==='income'?'আয়ের হিসাব সংরক্ষণ হয়েছে।':'ব্যয়ের হিসাব সংরক্ষণ হয়েছে।')}}$('incomeForm').addEventListener('submit',e=>submit('income',e));$('expenseForm').addEventListener('submit',e=>submit('expense',e));$('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({app:'Pakka Mosjid',version:2,exportedAt:new Date().toISOString(),records},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pakka-mosjid-backup.json';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url)});$('importBtn').addEventListener('click',()=>$('importFile').click());$('importFile').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{const parsed=JSON.parse(await f.text());const list=Array.isArray(parsed)?parsed:parsed.records;if(!Array.isArray(list)||!list.every(r=>r&&['income','expense'].includes(r.type)&&Number(r.amount)>0)){throw new Error('bad')}if(confirm('ব্যাকআপের হিসাব বর্তমান তালিকার সঙ্গে যোগ করবেন?')){const ids=new Set(records.map(r=>r.id));list.forEach(r=>{if(!ids.has(r.id))records.push(r)});save();render();alert('ব্যাকআপের হিসাব যোগ হয়েছে।')}}catch(err){alert('এই ফাইলটি সঠিক পাক্কা মসজিদ ব্যাকআপ নয়।')}e.target.value=''});render()})();
+</script></body></html>
